@@ -3,14 +3,7 @@ import { useState } from "react";
 import { auth } from "../firebase";
 import { Link, useNavigate } from "react-router-dom";
 import { FirebaseError } from "firebase/app";
-import {
-  Form,
-  Error,
-  Input,
-  Switcher,
-  Title,
-  Wrapper,
-} from "../components/auth-components";
+import { Form, Error, Input, Switcher, Title, Wrapper } from "../components/auth-components";
 import GithubButton from "../components/github-btn";
 
 export default function CreateAccount() {
@@ -36,6 +29,7 @@ export default function CreateAccount() {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
+    // user의 정보가 하나라도 채워지지 않는다면 create 페이지에 계속 머무르게 한다.
     if (isLoading || name === "" || email === "" || password === "") return;
     try {
       setLoading(true);
@@ -62,6 +56,9 @@ export default function CreateAccount() {
       {error !== "" ? <Error>{error}</Error> : null}
       <Switcher>
         Already have an account? <Link to="/login">Log in &rarr;</Link>
+      </Switcher>
+      <Switcher>
+        Don't remember your password? <Link to ="/change-password">Change Password &rarr;</Link>
       </Switcher>
       <GithubButton />
     </Wrapper>
