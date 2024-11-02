@@ -8,6 +8,7 @@ import { createGlobalStyle } from "styled-components";
 import reset from "styled-reset";
 import { useEffect, useState } from "react";
 import LoadingScreen from "./components/loading-screen";
+import { auth } from "./firebase";
 
 const router = createBrowserRouter([
   {
@@ -49,6 +50,8 @@ const GlobalStyle = createGlobalStyle`
 function App() {
   const [isLoading, setLoading] = useState(true);
   const init = async() => {
+    await auth.authStateReady();
+
     // wait for firebase
     setLoading(false);
   }
@@ -59,7 +62,9 @@ function App() {
 
   return (
     <>
+      // 아래의 스타일은 현재 페이지에 작성된 css스타일을 따라가도록 한다.
       <GlobalStyle />
+      // 로딩이 진행되는 경우에은 LoadingScreen을 보여주고 아니면 router를 통해 해당 페이지를 보여준다
       { isLoading ? <LoadingScreen /> : <RouterProvider router={router} />}
     </>
   );
