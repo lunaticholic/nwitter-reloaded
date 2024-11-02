@@ -9,11 +9,13 @@ import reset from "styled-reset";
 import { useEffect, useState } from "react";
 import LoadingScreen from "./components/loading-screen";
 import { auth } from "./firebase";
+import ProtectedRoute from "./components/protected-route";
 
 const router = createBrowserRouter([
   {
+    // ProtectedRoute로 감싼건 로그인을 했을 경우에만 Layout화면을 보이게 하는 것이다
     path: "/",
-    element: <Layout />,
+    element: <ProtectedRoute><Layout /></ProtectedRoute>,
     children: [
       {
         path: "",

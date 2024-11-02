@@ -70,7 +70,7 @@ export default function CreateAccount(){
         try {
             // 계정 생성하기
             const credentials = await createUserWithEmailAndPassword(auth, email, password);
-            console.log(credentials.user)
+            // console.log(credentials.user)
             await updateProfile(credentials.user, {
                 displayName: name,
             });
