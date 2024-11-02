@@ -48,7 +48,7 @@ export default function CreateAccount(){
     }
 
     return <Wrapper>
-        <Title>Login to 🅧</Title>
+        <Title>Login to 𝕏</Title>
         <Form onSubmit={onSubmit}>
             <Input onChange={onChange} name="email" value={email} placeholder="Email" type="email" required />
             <Input onChange={onChange} name="password" value={password} placeholder="Password" type="password" required />
