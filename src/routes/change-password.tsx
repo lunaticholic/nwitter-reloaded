@@ -48,9 +48,6 @@ export default function ChangePassword() {
             <Switcher>
                 Already have an account? <Link to="/login">Log in &rarr;</Link>
             </Switcher>
-            <Switcher>
-                Don't remember your password? <Link to ="">Change Password &rarr;</Link>
-            </Switcher>
             <GithubButton />
         </Wrapper>
     );
