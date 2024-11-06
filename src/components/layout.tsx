@@ -5,11 +5,11 @@ import { auth } from "../firebase";
 const Wrapper = styled.div`
     display: grid;
     gap: 20px;
+    grid-template-columns: 1fr 4fr;
     padding: 50px 0px;
     width: 100%;
     height: 100%;
     max-width: 860px;
-    margin: 0 auto;
 `;
 const Menu = styled.div`
     display: flex;
@@ -27,8 +27,7 @@ const MenuItem = styled.div`
     width: 50px;
     height: 50px;
     svg {
-        width: 25px;
-        height: 25px;
+        width: 30px;
         fill: white;
     }
     &.log-out {
@@ -67,7 +66,7 @@ export default function Layout(){
                     </MenuItem>
                 </Link>
                 <MenuItem onClick={onLogOut} className="log-out">
-                    <svg dataSlot="icon" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                         <path clipRule="evenodd" fillRule="evenodd" d="M3 4.25A2.25 2.25 0 0 1 5.25 2h5.5A2.25 2.25 0 0 1 13 4.25v2a.75.75 0 0 1-1.5 0v-2a.75.75 0 0 0-.75-.75h-5.5a.75.75 0 0 0-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 0 0 .75-.75v-2a.75.75 0 0 1 1.5 0v2A2.25 2.25 0 0 1 10.75 18h-5.5A2.25 2.25 0 0 1 3 15.75V4.25Z" />
                         <path clipRule="evenodd" fillRule="evenodd" d="M19 10a.75.75 0 0 0-.75-.75H8.704l1.048-.943a.75.75 0 1 0-1.004-1.114l-2.5 2.25a.75.75 0 0 0 0 1.114l2.5 2.25a.75.75 0 1 0 1.004-1.114l-1.048-.943h9.546A.75.75 0 0 0 19 10Z" />
                     </svg>
