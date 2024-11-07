@@ -18,6 +18,18 @@ const Wrapper = styled.div`
     display: flex;
     gap: 10px;
     flex-direction: column;
+    overflow-y: scroll;
+
+    /* Firefox용 스크롤바 숨기기 */
+    scrollbar-width: none;
+    
+    /* Chrome, Safari, Opera용 스크롤바 숨기기 */
+    &::-webkit-scrollbar {
+        display: none;
+    }
+    
+    /* IE, Edge용 스크롤바 숨기기 */
+    -ms-overflow-style: none;
 `;
 
 export default function Timeline(){
@@ -28,7 +40,7 @@ export default function Timeline(){
     // 컴포넌트가 마운트될 때 트윗 목록을 가져옴
     useEffect(() => {
         let unsubscribe: Unsubscribe | null = null;
-        // 트윗 목록을 가져오는 함수
+        // 트윗 목록을 가져오는 함���
     const fetchTweets = async () => {
         const tweetsQuery = query(
             collection(db, "tweets"),
