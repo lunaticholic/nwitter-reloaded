@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { styled } from "styled-components";
+import { auth, db } from "../firebase";
+import { addDoc, collection } from "firebase/firestore";
 
 const Form = styled.form`
     display: flex;
@@ -60,9 +62,11 @@ const SubmitBtn = styled.input`
 `;
 
 export default function PostTweetForm(){
-
+    // 로딩 상태 관리
     const [isLoading, setIsLoading] = useState(false);
+    // 트윗 상태 관리
     const [tweet, setTweet] = useState("");
+    // 파일 상태 관리
     const [file, setFile] = useState<File | null>(null);
 
     // 텍스트 변경 함수
@@ -78,11 +82,42 @@ export default function PostTweetForm(){
         }
     };
 
+
+    const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        // 폼 제출 방지
+        e.preventDefault();
+        // 현재 사용자 정보 가져오기
+        const user = auth.currentUser;
+        if(!user || isLoading || tweet === "" || tweet.length > 180){
+            return;
+        }
+        try{
+            setIsLoading(true);
+            // 데이터베이스에 트윗 저장
+            const doc = await addDoc(collection(db, "tweets"), {
+                tweet,
+                createdAt: Date.now(),
+                username: user.displayName || "Anonymous",
+                userId: user.uid,
+            });
+        } catch(e){
+            // 에러 처리
+            console.log(e);
+        } finally {
+            // 로딩 상태 초기화
+            setIsLoading(false);
+        }
+    };
+
     return (
-        <Form>
+        <Form onSubmit={onSubmit}>
+            {/* 트윗 입력 창 */}
             <TextArea rows={5} maxLength={180} value={tweet} onChange={onChange} placeholder="What is happening?" required />
+            {/* 파일 첨부 버튼 */}
             <AttachFileButton htmlFor="file">{file ? "Photo added ✅" : "Add Photo"}</AttachFileButton>
+            {/* 파일 첨부 입력 */}
             <AttachFileInput onChange={onFileChange} type="file" id="file" accept="image/*" />
+            {/* 트윗 제출 버튼 */}
             <SubmitBtn type="submit" value={isLoading ? "Posting..." : "Post Tweet"} />
         </Form>
     );
