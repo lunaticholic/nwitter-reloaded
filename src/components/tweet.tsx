@@ -250,18 +250,27 @@ export default function Tweet({ username, photo, tweet, id, userId, createdAt }:
             setIsLoading(true);
             const tweetRef = doc(db, "tweets", id);
             
-            let updatedTweet = {
+            let updatedTweet: any = {
                 tweet: editedTweet,
             };
 
+            // 기존 사진이 있고 새 파일이 있는 경우, 기존 사진 삭제
+            if (photo && editedFile) {
+                const oldPhotoRef = ref(storage, `tweets/${user.uid}/${id}`);
+                await deleteObject(oldPhotoRef);
+            }
+
+            // 새 파일이 있는 경우 업로드
             if (editedFile) {
                 const locationRef = ref(storage, `tweets/${user.uid}/${id}`);
                 const result = await uploadBytes(locationRef, editedFile);
                 const url = await getDownloadURL(result.ref);
-                updatedTweet = {
-                    ...updatedTweet,
-                    photo: url
-                };
+                updatedTweet.photo = url;
+            } else if (editedFile === null && photo) {
+                // 사진을 삭제하는 경우
+                const photoRef = ref(storage, `tweets/${user.uid}/${id}`);
+                await deleteObject(photoRef);
+                updatedTweet.photo = null;  // photo 필드를 null로 설정
             }
 
             await updateDoc(tweetRef, updatedTweet);
@@ -338,27 +347,13 @@ export default function Tweet({ username, photo, tweet, id, userId, createdAt }:
             </Header>
             {isEditing ? (
                 <EditContainer>
-                    <TextArea
-                        value={editedTweet}
-                        onChange={(e) => setEditedTweet(e.target.value)}
-                        placeholder="Edit your tweet..."
-                        maxLength={180}
-                    />
-                    <FileInput
-                        type="file"
-                        id="file"
-                        accept="image/*"
-                        onChange={onFileChange}
-                    />
+                    <TextArea value={editedTweet} onChange={(e) => setEditedTweet(e.target.value)} placeholder="Edit your tweet..." maxLength={180} />
+                    <FileInput type="file" id="file" accept="image/*" onChange={onFileChange} />
                     <FileButton htmlFor="file">
                         {editedFile ? "Photo added ✅" : "Add photo"}
                     </FileButton>
                     <ButtonsContainer>
-                        <CancelButton onClick={() => {
-                            setIsEditing(false);
-                            setEditedTweet(tweet);
-                            setEditedFile(null);
-                        }}>
+                        <CancelButton onClick={() => { setIsEditing(false); setEditedTweet(tweet); setEditedFile(null);}}>
                             Cancel
                         </CancelButton>
                         <SaveButton onClick={onEdit} disabled={isLoading}>
